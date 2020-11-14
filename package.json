@@ -12,6 +12,16 @@
   "dependencies": {
     "vue": "^2.5.2"
   },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "node ./auto-fix/index.js",
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
