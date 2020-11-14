@@ -15,7 +15,6 @@
   "lint-staged": {
     "*.{js,vue}": [
       "node ./auto-fix/index.js",
-      "eslint --fix",
       "git add"
     ]
   },
