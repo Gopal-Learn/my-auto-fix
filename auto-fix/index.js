@@ -5,16 +5,11 @@ const chalk = require('chalk');
 function resolve(p) {
   return path.join(__dirname, '..', p);
 }
-// const objRegex = /\{[^}]*\}/g;
-const objRegex = /\{[^}\/\/]*\}/g;
 
-// 关于注释的正则
-const reg1 = /\/\/.*/g;
-const reg2 = /\/\*[\s\S]*?\*\//g;
+const objRegex = /\{[^}\/\/]*\}/g;
 
 function fileDisplay(filePath) {
   let file = resolve(filePath);
-  // 读取文件路径，返回文件列表
   let fileList = fs.readdirSync(file, 'utf8');
 
   function compare() {
@@ -44,6 +39,7 @@ function fileDisplay(filePath) {
       let arr = [];
       item = JSON.parse(item);
       arr = Object.entries(item);
+      // 排序
       arr = arr.sort(compare());
       let tempObj = {};
       // 将排序好的数组拼接成对象
@@ -54,20 +50,13 @@ function fileDisplay(filePath) {
       let tempStr = JSON.stringify(tempObj, null, 2);
       // 去掉 key 值的双引号
       tempStr = tempStr.replace(/"/g, "").replace(/\: /g,"\: \'").replace(/\,/g,"\'\,").replace(/\n\}/g,"\'\n\}");
-      // console.log(tempStr);
       return tempStr;
     }
 
-    // fileContents = fileContents.replace(reg1, '')
-    // .replace(reg2, '')
-    // .replace(/(\n[\s\t]*\r*\n)/g, '\n')
-    // .replace(/^[\n\r\n\t]*|[\n\r\n\t]*$/g, ''); // 去掉注释，以及去掉空行
-
+    // 匹配对象并排序并替换
     fileContents = fileContents.replace(objRegex, function(match) {
       return sortObj(match)
     });
-
-    // fileContents += '\n';
 
     // 输出到文件中
     fs.writeFileSync(fileDir, fileContents, 'utf8');
@@ -75,7 +64,7 @@ function fileDisplay(filePath) {
 
 }
 try {
-  fileDisplay('src/utils/constant');
+  fileDisplay('src/constant');
   console.log(chalk.green(`Auto fix complete`))
 } catch (e) {
   console.log(e);
